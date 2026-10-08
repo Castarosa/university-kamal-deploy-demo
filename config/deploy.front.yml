@@ -1,0 +1,33 @@
+service: frontend
+image: <username>/frontend
+
+servers:
+  web:
+    hosts:
+      - <server-ip>
+    options:
+      network: "app-network"
+
+proxy:
+  app_port: 80
+  host: www.example.com
+  ssl: true
+
+builder:
+  arch: arm64
+  context: ./front
+  dockerfile: ./front/dockerfile
+
+registry:
+  server: registry.hub.docker.com
+  username: <username>
+  password:
+    - KAMAL_PASSWORD
+
+env:
+  clear:
+    NODE_ENV: production
+    CERT_CONTACT_EMAIL: <email>
+
+ssh:
+  user: <ssh-user>

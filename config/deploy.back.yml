@@ -1,0 +1,42 @@
+service: backend
+image: <username>/backend
+
+servers:
+  web:
+    hosts:
+      - <server-ip>
+    options:
+      network: "app-network"
+
+proxy:
+  app_port: 8000
+  host: api.example.com
+  ssl: true
+  healthcheck:
+    path: /healthcheck
+    interval: 10
+
+builder:
+  arch: arm64
+  context: ./back
+  dockerfile: ./back/dockerfile
+
+registry:
+  server: registry.hub.docker.com
+  username: <username>
+  password:
+    - KAMAL_PASSWORD
+
+volumes:
+  - /var/lib/app/database:/app/database
+  - /var/lib/app/avatars:/app/uploads/avatars
+
+env:
+  clear:
+    NODE_ENV: production
+    CERT_CONTACT_EMAIL: <email>
+  secret:
+    - DATABASE_URL
+
+ssh:
+  user: <ssh-user>
